@@ -10,20 +10,36 @@
  */
 
 #pragma once
+#include "Player.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
 
 using namespace std;
 
-class Game
+enum Move
+{
+    INCOME = 1,
+    FOREIN_AID = 2,
+    TAX = 3,
+    TRANSFER = 4,
+    STEAL = 5
+
+};
+
+namespace coup
 {
     class Player;
 
-    public:
-        Game();
-        vector<Player*> turns;
-        string turn();
-        vector<string> players();
-        string winner();
-};
+    class Game
+    {
+        public:
+            Game();
+            vector<Player*> _turns;
+            int nowPlaying;
+            Player* nextPlaying();
+            string turn();
+            vector<string> players();
+            string winner();
+    };
+}

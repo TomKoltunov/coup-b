@@ -43,11 +43,19 @@ namespace coup
 
     void Duke::tax()
     {
-        if (!(this->_isInGame)) 
+        if (this->coins() >= 10)
         {
-            throw invalid_argument{"This player is out of this game"};
+            throw invalid_argument{"Must perform 'coup' on some player in this game"};
         }
-        this->_money = this->_money + 3;
+        else if (this != this->_game->nextPlaying())
+        {
+            throw invalid_argument{"It's not 'this' player's turn to play"};
+        }
+        else
+        {
+            this->_money = this->_money + 3;
+            this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+        }
     }
 
     void Duke::block(Player& player)
