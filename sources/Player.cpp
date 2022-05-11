@@ -18,11 +18,14 @@ using namespace std;
 namespace coup
 {
     Player::Player(Game* game, const string& name)
-    {
+    {   
         this->_game = game;
         this->_name = name;
         this->_money = 0;
         this->_isInGame = true;
+        this->blocked = NULL;
+        this->last = 0;
+        this->toTake = 0;
         if (this->_game->players().size() >= 6)
         {
             throw invalid_argument{"There is no place to add this player to this game"};
@@ -46,6 +49,7 @@ namespace coup
         else
         {
             this->_money = this->_money + 1;
+            last = INCOME;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
     }
@@ -63,6 +67,7 @@ namespace coup
         else
         {
             this->_money = this->_money + 2;
+            last = FOREIN_AID;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
     }
@@ -85,6 +90,7 @@ namespace coup
         {
             other._isInGame = false;
             this->_money = this->_money - 7;
+            last = COUP;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }   
     }

@@ -43,11 +43,49 @@ namespace coup
 
     void Captain::steal(Player& player)
     {
-
+        if (this->coins() >= 10)
+        {
+            throw invalid_argument{"Must perform 'coup' on some player in this game"};
+        }
+        else if (this != this->_game->nextPlaying())
+        {
+            throw invalid_argument{"It's not 'this' player's turn to play"};
+        }
+        else if (player._money == 1)
+        {
+            this->toTake = 1;
+            player._money = player._money - 1;
+            this->_money = this->_money + 1;
+            blocked = &player;
+            last = STEAL;
+            this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+        }
+        else if (player._money > 1)
+        {
+            this->toTake = 2;
+            player._money = player._money - 2;
+            this->_money = this->_money + 2;
+            blocked = &player;
+            last = STEAL;
+            this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+        }
+        else
+        {
+            this->toTake = 0;
+            last = STEAL;
+        }
     }
 
     void Captain::block(Player& player)
     {
-
+        if (player.last == STEAL)
+        {
+            player._money = player._money - player.toTake;
+            player.blocked->_money = player.blocked->_money + player.toTake;
+        }
+        else
+        {
+            throw invalid_argument{"Unable to do it"};
+        }
     }
 } 

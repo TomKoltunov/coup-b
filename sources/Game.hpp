@@ -23,8 +23,9 @@ enum Move
     FOREIN_AID = 2,
     TAX = 3,
     TRANSFER = 4,
-    STEAL = 5
-
+    STEAL = 5,
+    ASSASSINCOUP = 6,
+    COUP = 7
 };
 
 namespace coup
@@ -36,7 +37,7 @@ namespace coup
         public:
             Game();
             vector<Player*> _turns;
-            int nowPlaying;
+            size_t nowPlaying;
             Player* nextPlaying();
             string turn();
             vector<string> players();

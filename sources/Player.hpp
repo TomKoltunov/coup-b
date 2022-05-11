@@ -23,11 +23,14 @@ namespace coup
     class Player
     {
         public:
-            Game* _game;
+            Game *_game;
             string _name;
             int _money;
             bool _isInGame;
-            Player(Game* game, const string& name);
+            Player *blocked;
+            int last;
+            int toTake;
+            Player(Game *game, const string &name);
             void income();
             void foreign_aid();
             virtual void coup(Player& other);

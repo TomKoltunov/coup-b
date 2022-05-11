@@ -51,7 +51,7 @@ namespace coup
 
     Player* Game:: nextPlaying()
     {
-        int size = this->_turns.size();
+        size_t size = this->_turns.size();
         if ((!(this->_turns[nowPlaying]->_isInGame) && nowPlaying == (size - 1)) || (nowPlaying >= size))
         {
             nowPlaying = 0;

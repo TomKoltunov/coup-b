@@ -49,13 +49,34 @@ namespace coup
     */
     void Assassin::coup(Player& other)
     {
-        if (this->_money < 3)
+        if (!(other._isInGame))
         {
-            throw invalid_argument{"This Assassin doesn't have enough coins to 'coup' the player called 'other'"};
+            throw invalid_argument{"'other' doesn't playing in this game anymore"};
         }
-        else if (this->_money < 7) 
+        else if (this != this->_game->nextPlaying())
         {
-            
+            throw invalid_argument{"It's not 'this' player's turn to play"};
         }
+        // else if (this->_game->players().size() < 2)
+        // {
+        //     throw invalid_argument{"Should be at least 2 players in order to perform 'coup'"};
+        // }
+        else if (this->_money >= 7)
+        {
+            this->_money = this->_money - 7;
+            last = COUP;
+        }
+        else if ((this->_money >= 3) && (this->_money < 7))
+        {
+            blocked = &other;
+            this->_money =this->_money - 3;
+            last = ASSASSINCOUP;
+        }
+        else 
+        {
+            throw invalid_argument{"'this' player doesn't have enough money to perform Assassin's 'coup'"};
+        }
+        other._isInGame = false;
+        this->_game->nowPlaying = this->_game->nowPlaying + 1; 
     }
 } 
