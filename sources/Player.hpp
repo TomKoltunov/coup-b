@@ -16,6 +16,17 @@
 
 using namespace std;
 
+enum Move
+{
+    INCOME = 1,
+    FOREIN_AID = 2,
+    TAX = 3,
+    TRANSFER = 4,
+    STEAL = 5,
+    ASSASSINCOUP = 6,
+    COUP = 7
+};
+
 namespace coup
 {
     class Game;

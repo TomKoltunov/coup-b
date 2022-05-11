@@ -54,14 +54,14 @@ namespace coup
         else
         {
             this->_money = this->_money + 3;
-            last = TAX;
+            last = Move::TAX;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
     }
 
     void Duke::block(Player& player)
     {
-        if (player.last == FOREIN_AID)
+        if (player.last == Move::FOREIN_AID)
         {
             player._money = player._money - 2;
         }

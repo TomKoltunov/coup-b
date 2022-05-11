@@ -57,7 +57,7 @@ namespace coup
             player._money = player._money - 1;
             this->_money = this->_money + 1;
             blocked = &player;
-            last = STEAL;
+            last = Move::STEAL;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
         else if (player._money > 1)
@@ -66,19 +66,19 @@ namespace coup
             player._money = player._money - 2;
             this->_money = this->_money + 2;
             blocked = &player;
-            last = STEAL;
+            last = Move::STEAL;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
         else
         {
             this->toTake = 0;
-            last = STEAL;
+            last = Move::STEAL;
         }
     }
 
     void Captain::block(Player& player)
     {
-        if (player.last == STEAL)
+        if (player.last == Move::STEAL)
         {
             player._money = player._money - player.toTake;
             player.blocked->_money = player.blocked->_money + player.toTake;

@@ -43,7 +43,7 @@ namespace coup
 
     void Contessa::block(Player& player)
     {
-        if (player.last == ASSASSINCOUP)
+        if (player.last == Move::ASSASSINCOUP)
         {
             player.blocked->_isInGame = true;
         }

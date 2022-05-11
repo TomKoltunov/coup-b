@@ -64,13 +64,13 @@ namespace coup
         else if (this->_money >= 7)
         {
             this->_money = this->_money - 7;
-            last = COUP;
+            last = Move::COUP;
         }
         else if ((this->_money >= 3) && (this->_money < 7))
         {
             blocked = &other;
             this->_money =this->_money - 3;
-            last = ASSASSINCOUP;
+            last = Move::ASSASSINCOUP;
         }
         else 
         {

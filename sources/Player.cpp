@@ -17,10 +17,10 @@ using namespace std;
 
 namespace coup
 {
-    Player::Player(Game* game, const string& name)
+    Player::Player(Game* game, const string& name) : _game(game), _name(name)
     {   
-        this->_game = game;
-        this->_name = name;
+        // this->_game = game;
+        // this->_name = name;
         this->_money = 0;
         this->_isInGame = true;
         this->blocked = NULL;
@@ -49,7 +49,7 @@ namespace coup
         else
         {
             this->_money = this->_money + 1;
-            last = INCOME;
+            last = Move::INCOME;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
     }
@@ -67,9 +67,10 @@ namespace coup
         else
         {
             this->_money = this->_money + 2;
-            last = FOREIN_AID;
+            last = Move::FOREIN_AID;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
+        
     }
 
     void Player::coup(Player& other)
@@ -90,7 +91,7 @@ namespace coup
         {
             other._isInGame = false;
             this->_money = this->_money - 7;
-            last = COUP;
+            last = Move::COUP;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }   
     }

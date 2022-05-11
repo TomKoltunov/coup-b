@@ -60,7 +60,7 @@ namespace coup
         {
             player1._money = player1._money - 1;
             player2._money = player2._money + 1;
-            last = TRANSFER;
+            last = Move::TRANSFER;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
         else
@@ -75,7 +75,7 @@ namespace coup
     */
     void Ambassador::block(Player& player)
     {
-        if (player.last == STEAL)
+        if (player.last == Move::STEAL)
         {
             player._money = player._money - player.toTake;
             player.blocked->_money = player.blocked->_money + player.toTake;

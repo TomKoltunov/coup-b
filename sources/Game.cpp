@@ -56,11 +56,36 @@ namespace coup
         {
             nowPlaying = 0;
         }
-        for (size_t i = nowPlaying; (this->_turns[i]->_isInGame) && (i < size); i++)
+        for (size_t i = nowPlaying; i < size; i++)
         {
-            nowPlaying = i;
-            break;
+            if (this->_turns[i]->_isInGame)
+            {
+                nowPlaying = i;
+                break;
+            }
         }
+        ///////////////////////////////////////////////////////////////////////////
+        if (!(this->_turns[nowPlaying]->_isInGame) && nowPlaying != (size - 1))
+        {
+            for (size_t i = nowPlaying; i < size; i++)
+            {
+                if (this->_turns[i]->_isInGame)
+                {
+                    nowPlaying = i;
+                    break;
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////////
         return this->_turns[nowPlaying];
+    }
+
+    void Game::insert(Player *player)
+    {
+        if (this->players().size() >= 6)
+        {
+            throw invalid_argument{""};
+        }
+        this->_turns.push_back(player);
     }
 }
