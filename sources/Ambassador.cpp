@@ -17,6 +17,8 @@
 
 using namespace std;
 
+const int TEN = 10;
+
 namespace coup
 {
     /*
@@ -48,24 +50,50 @@ namespace coup
     */
     void Ambassador::transfer(Player& player1, Player& player2)
     {
-        if (this->coins() >= 10)
+        if (!(this->_game->hasBegan))
         {
-            throw invalid_argument{"Must perform 'coup' on some player in this game"};
+            this->_game->hasBegan = true;
+            if (this->coins() >= TEN)
+            {
+                throw invalid_argument{"Must perform 'coup' on some player in this game"};
+            }
+            if (this != this->_game->nextPlaying())
+            {
+                throw invalid_argument{"It's not 'this' player's turn to play"};
+            }
+            if (player1._money > 0)
+            {
+                player1._money = player1._money - 1;
+                player2._money = player2._money + 1;
+                last = TRANSFER;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+            }
+            else
+            {
+                throw invalid_argument{"'player1' doesn't have any money to transfer"};
+            }
         }
-        else if (this != this->_game->nextPlaying())
+        else 
         {
-            throw invalid_argument{"It's not 'this' player's turn to play"};
-        }
-        else if (player1._money > 0)
-        {
-            player1._money = player1._money - 1;
-            player2._money = player2._money + 1;
-            last = Move::TRANSFER;
-            this->_game->nowPlaying = this->_game->nowPlaying + 1; 
-        }
-        else
-        {
-            throw invalid_argument{"'player1' doesn't have any money to transfer"};
+            if (this->coins() >= TEN)
+            {
+                throw invalid_argument{"Must perform 'coup' on some player in this game"};
+            }
+            if (this != this->_game->nextPlaying())
+            {
+                throw invalid_argument{"It's not 'this' player's turn to play"};
+            }
+            if (player1._money > 0)
+            {
+                player1._money = player1._money - 1;
+                player2._money = player2._money + 1;
+                last = TRANSFER;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+            }
+            else
+            {
+                throw invalid_argument{"'player1' doesn't have any money to transfer"};
+            }
         }
     }
 
@@ -75,14 +103,30 @@ namespace coup
     */
     void Ambassador::block(Player& player)
     {
-        if (player.last == Move::STEAL)
+        if (!(this->_game->hasBegan))
         {
-            player._money = player._money - player.toTake;
-            player.blocked->_money = player.blocked->_money + player.toTake;
+            this->_game->hasBegan = true;
+            if (player.last == STEAL)
+            {
+                player._money = player._money - player.toTake;
+                player.blocked->_money = player.blocked->_money + player.toTake;
+            }
+            else
+            {
+                throw invalid_argument{"Unable to do it"};
+            }
         }
         else
         {
-            throw invalid_argument{"Unable to do it"};
+            if (player.last == STEAL)
+            {
+                player._money = player._money - player.toTake;
+                player.blocked->_money = player.blocked->_money + player.toTake;
+            }   
+            else
+            {
+                throw invalid_argument{"Unable to do it"};
+            }
         }
     }
 } 

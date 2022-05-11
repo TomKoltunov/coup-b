@@ -17,6 +17,7 @@ namespace coup
     Game::Game()
     {
         this->nowPlaying = 0;
+        this->hasBegan = false;
     }
 
     string Game::turn()
@@ -26,12 +27,12 @@ namespace coup
 
     vector<string> Game::players()
     {
-        vector<string> vec(this->_turns.size());
-        for (size_t i = 0; i < _turns.size(); i++)
+        vector<string> vec;
+        for (size_t i = 0; i < this->_turns.size(); i++)
         {
             if (this->_turns[i]->_isInGame)
             {
-                vec[i] = this->_turns[i]->_name;
+                vec.push_back(this->_turns[i]->_name);
             }
         }
         return vec;
@@ -39,53 +40,50 @@ namespace coup
 
     string Game::winner()
     {
-        if (this->players().size() == 1) 
+        if (!this->hasBegan)
         {
-            return this->nextPlaying()->_name;
+            throw invalid_argument{"no winner"};
         }
-        else 
+        if (this->players().size() > 1)
         {
             throw invalid_argument{"There is still no winner in this game"};
         }
+        return this->nextPlaying()->_name;
     }
 
     Player* Game:: nextPlaying()
     {
         size_t size = this->_turns.size();
-        if ((!(this->_turns[nowPlaying]->_isInGame) && nowPlaying == (size - 1)) || (nowPlaying >= size))
+        if (this->nowPlaying >= size)
         {
-            nowPlaying = 0;
+            this->nowPlaying = 0;
         }
+        if (((!(this->_turns[nowPlaying]->_isInGame)) && (this->nowPlaying == (size - 1))))
+        {
+            this->nowPlaying = 0;
+        }
+ 
         for (size_t i = nowPlaying; i < size; i++)
         {
             if (this->_turns[i]->_isInGame)
             {
-                nowPlaying = i;
+                this->nowPlaying = i;
                 break;
             }
         }
         ///////////////////////////////////////////////////////////////////////////
-        if (!(this->_turns[nowPlaying]->_isInGame) && nowPlaying != (size - 1))
+        if (!(this->_turns[nowPlaying]->_isInGame))
         {
-            for (size_t i = nowPlaying; i < size; i++)
+            for (size_t i = 0; i < size; i++)
             {
                 if (this->_turns[i]->_isInGame)
                 {
-                    nowPlaying = i;
+                    this->nowPlaying = i;
                     break;
                 }
             }
         }
         ////////////////////////////////////////////////////////////////////////////
         return this->_turns[nowPlaying];
-    }
-
-    void Game::insert(Player *player)
-    {
-        if (this->players().size() >= 6)
-        {
-            throw invalid_argument{""};
-        }
-        this->_turns.push_back(player);
     }
 }

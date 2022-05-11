@@ -43,13 +43,28 @@ namespace coup
 
     void Contessa::block(Player& player)
     {
-        if (player.last == Move::ASSASSINCOUP)
+        if (!(this->_game->hasBegan))
         {
-            player.blocked->_isInGame = true;
+            this->_game->hasBegan = true;
+            if (player.last == ASSASSIN_COUP)
+            {
+                player.blocked->_isInGame = true;
+            }
+            else
+            {
+                throw invalid_argument{"Unable to do it"};
+            }
         }
         else
         {
-            throw invalid_argument{"Unable to do it"};
+            if (player.last == ASSASSIN_COUP)
+            {
+                player.blocked->_isInGame = true;
+            }
+            else
+            {
+                throw invalid_argument{"Unable to do it"};
+            }
         }
     }
 } 

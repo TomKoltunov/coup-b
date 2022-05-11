@@ -17,6 +17,8 @@
 
 using namespace std;
 
+const int TEN = 10;
+
 namespace coup
 {
     /*
@@ -43,31 +45,61 @@ namespace coup
 
     void Duke::tax()
     {
-        if (this->coins() >= 10)
+        if (!(this->_game->hasBegan))
         {
-            throw invalid_argument{"Must perform 'coup' on some player in this game"};
-        }
-        else if (this != this->_game->nextPlaying())
-        {
-            throw invalid_argument{"It's not 'this' player's turn to play"};
+            this->_game->hasBegan = true;
+            if (this->coins() >= TEN)
+            {
+                throw invalid_argument{"Must perform 'coup' on some player in this game"};
+            }
+            if (this != this->_game->nextPlaying())
+            {
+                throw invalid_argument{"It's not 'this' player's turn to play"};
+            }
+            this->_money = this->_money + 3;
+            last = TAX;
+            this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
         else
         {
+            if (this->coins() >= TEN)
+            {
+                throw invalid_argument{"Must perform 'coup' on some player in this game"};
+            }
+            if (this != this->_game->nextPlaying())
+            {
+                throw invalid_argument{"It's not 'this' player's turn to play"};
+            }
             this->_money = this->_money + 3;
-            last = Move::TAX;
+            last = TAX;
             this->_game->nowPlaying = this->_game->nowPlaying + 1; 
         }
     }
 
     void Duke::block(Player& player)
     {
-        if (player.last == Move::FOREIN_AID)
+        if (!(this->_game->hasBegan))
         {
-            player._money = player._money - 2;
+            this->_game->hasBegan = true;
+            if (player.last == FOREIN_AID)
+            {
+                player._money = player._money - 2;
+            }
+            else
+            {
+                throw invalid_argument{"Unable to do it"};
+            }
         }
-        else
+        else 
         {
-            throw invalid_argument{"Unable to do it"};
+            if (player.last == FOREIN_AID)
+            {
+                player._money = player._money - 2;
+            }
+            else
+            {
+                throw invalid_argument{"Unable to do it"};
+            }
         }
     }
 } 

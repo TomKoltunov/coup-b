@@ -17,6 +17,8 @@
 
 using namespace std;
 
+const int TEN = 10;
+
 namespace coup
 {
     /*
@@ -43,49 +45,103 @@ namespace coup
 
     void Captain::steal(Player& player)
     {
-        if (this->coins() >= 10)
+        if (!(this->_game->hasBegan))
         {
-            throw invalid_argument{"Must perform 'coup' on some player in this game"};
+            this->_game->hasBegan = true;
+            if (this->coins() >= TEN)
+            {
+                throw invalid_argument{"Must perform 'coup' on some player in this game"};
+            }
+            if (this != this->_game->nextPlaying())
+            {
+                throw invalid_argument{"It's not 'this' player's turn to play"};
+            }
+            if (player._money == 1)
+            {
+                this->toTake = 1;
+                player._money = player._money - 1;
+                this->_money = this->_money + 1;
+                blocked = &player;
+                last = STEAL;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+            }
+            else if (player._money > 1)
+            {
+                this->toTake = 2;
+                player._money = player._money - 2;
+                this->_money = this->_money + 2;
+                blocked = &player;
+                last = STEAL;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+            }
+            else
+            {
+                this->toTake = 0;
+                last = STEAL;
+            }
         }
-        else if (this != this->_game->nextPlaying())
+        else 
         {
-            throw invalid_argument{"It's not 'this' player's turn to play"};
-        }
-        else if (player._money == 1)
-        {
-            this->toTake = 1;
-            player._money = player._money - 1;
-            this->_money = this->_money + 1;
-            blocked = &player;
-            last = Move::STEAL;
-            this->_game->nowPlaying = this->_game->nowPlaying + 1; 
-        }
-        else if (player._money > 1)
-        {
-            this->toTake = 2;
-            player._money = player._money - 2;
-            this->_money = this->_money + 2;
-            blocked = &player;
-            last = Move::STEAL;
-            this->_game->nowPlaying = this->_game->nowPlaying + 1; 
-        }
-        else
-        {
-            this->toTake = 0;
-            last = Move::STEAL;
+            if (this->coins() >= TEN)
+            {  
+                throw invalid_argument{"Must perform 'coup' on some player in this game"};
+            }
+            if (this != this->_game->nextPlaying())
+            {
+                throw invalid_argument{"It's not 'this' player's turn to play"};
+            }
+            if (player._money == 1)
+            {
+                this->toTake = 1;
+                player._money = player._money - 1;
+                this->_money = this->_money + 1;
+                blocked = &player;
+                last = STEAL;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+            }
+            else if (player._money > 1)
+            {
+                this->toTake = 2;
+                player._money = player._money - 2;
+                this->_money = this->_money + 2;
+                blocked = &player;
+                last = STEAL;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+            }
+            else
+            {
+                this->toTake = 0;
+                last = STEAL;
+            }
         }
     }
 
     void Captain::block(Player& player)
     {
-        if (player.last == Move::STEAL)
+        if (!(this->_game->hasBegan))
         {
-            player._money = player._money - player.toTake;
-            player.blocked->_money = player.blocked->_money + player.toTake;
+            this->_game->hasBegan = true;
+            if (player.last == STEAL)
+            {
+                player._money = player._money - player.toTake;
+                player.blocked->_money = player.blocked->_money + player.toTake;
+            }
+            else
+            {
+                throw invalid_argument{"Unable to do it"};
+            }
         }
-        else
+        else 
         {
-            throw invalid_argument{"Unable to do it"};
+            if (player.last == STEAL)
+            {
+                player._money = player._money - player.toTake;
+                player.blocked->_money = player.blocked->_money + player.toTake;
+            }
+            else
+            {
+                throw invalid_argument{"Unable to do it"};
+            }
         }
     }
 } 

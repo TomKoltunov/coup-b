@@ -16,16 +16,13 @@
 
 using namespace std;
 
-enum Move
-{
-    INCOME = 1,
-    FOREIN_AID = 2,
-    TAX = 3,
-    TRANSFER = 4,
-    STEAL = 5,
-    ASSASSINCOUP = 6,
-    COUP = 7
-};
+#define INCOME 1
+#define FOREIN_AID 2
+#define TAX 3
+#define TRANSFER 4
+#define STEAL 5
+#define ASSASSIN_COUP 6
+#define COUP 7
 
 namespace coup
 {

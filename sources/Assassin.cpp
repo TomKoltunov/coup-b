@@ -17,6 +17,8 @@
 
 using namespace std;
 
+const int SEVEN = 7;    
+
 namespace coup
 {
     /*
@@ -49,34 +51,74 @@ namespace coup
     */
     void Assassin::coup(Player& other)
     {
-        if (!(other._isInGame))
+        if (!(this->_game->hasBegan))
         {
-            throw invalid_argument{"'other' doesn't playing in this game anymore"};
+            this->_game->hasBegan = true;
+            if (!(other._isInGame))
+            {
+                throw invalid_argument{"'other' doesn't playing in this game anymore"};
+            }
+            if (this != this->_game->nextPlaying())
+            {
+                throw invalid_argument{"It's not 'this' player's turn to play"};
+            }
+            if (this->_game->players().size() < 2)
+            {
+                throw invalid_argument{"Should be at least 2 players in order to perform 'coup'"};
+            }
+            if (this->_money >= SEVEN)
+            {
+                other._isInGame = false;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+                this->_money = this->_money - SEVEN;
+                last = COUP;
+            }
+            else if ((this->_money >= 3) && (this->_money < SEVEN))
+            {
+                other._isInGame = false;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+                blocked = &other;
+                this->_money =this->_money - 3;
+                last = ASSASSIN_COUP;
+            }
+            else 
+            {
+                throw invalid_argument{"'this' player doesn't have enough money to perform Assassin's 'coup'"};
+            }
         }
-        else if (this != this->_game->nextPlaying())
+        else
         {
-            throw invalid_argument{"It's not 'this' player's turn to play"};
+            if (!(other._isInGame))
+            {
+                throw invalid_argument{"'other' doesn't playing in this game anymore"};
+            }
+            if (this != this->_game->nextPlaying())
+            {
+                throw invalid_argument{"It's not 'this' player's turn to play"};
+            }
+            if (this->_game->players().size() < 2)
+            {
+                throw invalid_argument{"Should be at least 2 players in order to perform 'coup'"};
+            }
+            if (this->_money >= SEVEN)
+            {
+                other._isInGame = false;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+                this->_money = this->_money - SEVEN;
+                last = COUP;
+            }
+            else if ((this->_money >= 3) && (this->_money < SEVEN))
+            {
+                other._isInGame = false;
+                this->_game->nowPlaying = this->_game->nowPlaying + 1; 
+                blocked = &other;
+                this->_money =this->_money - 3;
+                last = ASSASSIN_COUP;
+            }
+            else 
+            {
+                throw invalid_argument{"'this' player doesn't have enough money to perform Assassin's 'coup'"};
+            }
         }
-        // else if (this->_game->players().size() < 2)
-        // {
-        //     throw invalid_argument{"Should be at least 2 players in order to perform 'coup'"};
-        // }
-        else if (this->_money >= 7)
-        {
-            this->_money = this->_money - 7;
-            last = Move::COUP;
-        }
-        else if ((this->_money >= 3) && (this->_money < 7))
-        {
-            blocked = &other;
-            this->_money =this->_money - 3;
-            last = Move::ASSASSINCOUP;
-        }
-        else 
-        {
-            throw invalid_argument{"'this' player doesn't have enough money to perform Assassin's 'coup'"};
-        }
-        other._isInGame = false;
-        this->_game->nowPlaying = this->_game->nowPlaying + 1; 
     }
 } 

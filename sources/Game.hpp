@@ -28,7 +28,7 @@ namespace coup
             vector<Player*> _turns;
             size_t nowPlaying;
             Player* nextPlaying();
-            void insert(Player *player);
+            bool hasBegan;
             string turn();
             vector<string> players();
             string winner();
